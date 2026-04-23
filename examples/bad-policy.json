@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AdminLike",
+      "Effect": "Allow",
+      "Action": "*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "RiskyS3Write",
+      "Effect": "Allow",
+      "Action": ["s3:*"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SensitiveEscalation",
+      "Effect": "Allow",
+      "Action": ["iam:PassRole", "iam:AttachRolePolicy"],
+      "Resource": "*"
+    }
+  ]
+}

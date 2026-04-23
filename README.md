@@ -8,6 +8,23 @@ Permission Guard is a local-first CLI for identifying overly broad AWS IAM permi
 
 The project is deterministic and rules-based. It does **not** use LLM APIs, and it does **not** claim to produce perfect least-privilege policies automatically.
 
+## 30-Second Demo
+
+Scan an intentionally risky IAM policy and get immediate, actionable output.
+
+```bash
+npx @kenjiifx/permissionguard scan examples/bad-policy.json
+```
+
+Expected result:
+- multiple **CRITICAL** findings
+- high aggregated risk score
+- clear remediation recommendations
+
+![Permission Guard CLI demo](assets/demo-scan.gif)
+
+> Maintainers: place the recorded terminal GIF at `assets/demo-scan.gif`. The repo includes `examples/bad-policy.json` specifically for this demo path.
+
 ## Why This Project Exists
 
 IAM policies often drift into risky patterns over time (`Action: "*"`, `Resource: "*"`, broad service wildcards). Permission Guard helps teams detect this drift quickly and gives concrete, reviewable next steps.
