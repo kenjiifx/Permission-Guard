@@ -36,6 +36,7 @@ withCommonFlags(program.command("scan [input]").description("Scan a local IAM po
 
 withCommonFlags(
   program.command("suggest [input]").description("Generate findings, risk score, and candidate safer policy")
+    .option("--candidate-output <path>", "Write generated candidate policy JSON to file")
 ).action(async (input, options) => {
   try {
     process.exitCode = await runSuggestCommand(input, options);

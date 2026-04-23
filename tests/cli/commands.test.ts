@@ -28,17 +28,22 @@ describe("cli command flows", () => {
 
   it("keeps suggest candidate output as valid policy json", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "pg-suggest-"));
-    const outputPath = join(tempDir, "candidate.json");
+    const candidateOutputPath = join(tempDir, "candidate.json");
+    const reportOutputPath = join(tempDir, "report.txt");
 
     await runSuggestCommand("examples/broad-s3-policy.json", {
-      output: outputPath,
+      output: reportOutputPath,
+      candidateOutput: candidateOutputPath,
       quiet: true,
       json: false,
       color: false
     });
 
-    const candidateRaw = await readFile(outputPath, "utf8");
+    const candidateRaw = await readFile(candidateOutputPath, "utf8");
     const parsed = JSON.parse(candidateRaw) as { Statement?: unknown[] };
     expect(Array.isArray(parsed.Statement)).toBe(true);
+
+    const reportRaw = await readFile(reportOutputPath, "utf8");
+    expect(reportRaw).toContain("PermissionGuard Scan Report");
   });
 });

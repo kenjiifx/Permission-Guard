@@ -9,6 +9,7 @@ export const TOOL_VERSION = "0.1.0";
 
 export interface CommonFlags {
   output?: string;
+  candidateOutput?: string;
   strict?: boolean;
   quiet?: boolean;
   json?: boolean;

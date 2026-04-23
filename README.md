@@ -25,7 +25,7 @@ npm run build
 
 ```bash
 permissionguard scan examples/admin-policy.json
-permissionguard suggest examples/broad-s3-policy.json --output safer-policy.json
+permissionguard suggest examples/broad-s3-policy.json --candidate-output safer-policy.json
 permissionguard report examples/mixed-policy.json --format markdown --output report.md
 permissionguard fetch --role MyAppRole
 permissionguard scan --role MyAppRole --strict
@@ -48,6 +48,10 @@ Options:
 ### `permissionguard suggest <input>`
 
 Run scan + suggestions + candidate safer policy generation.
+
+Options:
+- `--candidate-output <path>`: Write candidate policy JSON to a dedicated file
+- `--output <path>`: Write scan/suggestion report output (terminal or JSON mode)
 
 ### `permissionguard report <input> --format terminal|json|markdown`
 
@@ -116,6 +120,7 @@ Scripts:
 - `npm run build`
 - `npm run dev`
 - `npm run lint`
+- `npm run ci`
 - `npm run typecheck`
 - `npm run test`
 - `npm run test:watch`
