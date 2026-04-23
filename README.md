@@ -124,3 +124,9 @@ Scripts:
 ## Contributing
 
 PRs are welcome. Please include tests for new rules, scoring changes, or output format changes. Keep behavior deterministic and avoid introducing network dependencies outside AWS SDK calls initiated by user commands.
+
+## Community and Governance
+
+- Contribution guide: `CONTRIBUTING.md`
+- Code of conduct: `CODE_OF_CONDUCT.md`
+- Security policy: `SECURITY.md`
