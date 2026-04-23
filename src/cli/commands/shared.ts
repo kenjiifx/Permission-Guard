@@ -4,6 +4,7 @@ import type { NormalizedPolicyDocument, ReportPayload, ScanResult } from "../../
 import { formatReport, type ReportFormat } from "../../report/index.js";
 import { readJsonFile, readJsonFromStdin, writeJsonFile, writeTextFile } from "../../utils/io.js";
 import { toIamJson } from "../../core/diff.js";
+import { scoreFindings } from "../../core/scorer.js";
 
 export const TOOL_VERSION = "0.1.0";
 
@@ -15,6 +16,23 @@ export interface CommonFlags {
   json?: boolean;
   color?: boolean;
   role?: string;
+  minSeverity?: string;
+  failOn?: string;
+}
+
+const severityOrder = ["low", "medium", "high", "critical"] as const;
+type SeverityValue = (typeof severityOrder)[number];
+
+function severityRank(value: SeverityValue): number {
+  return severityOrder.indexOf(value);
+}
+
+export function parseSeverityOrThrow(value: string | undefined, flagName: string): SeverityValue | undefined {
+  if (!value) return undefined;
+  if (severityOrder.includes(value as SeverityValue)) {
+    return value as SeverityValue;
+  }
+  throw new Error(`Invalid ${flagName} value '${value}'. Use low, medium, high, or critical.`);
 }
 
 export async function loadPolicyInput(input: string | undefined, roleName?: string): Promise<NormalizedPolicyDocument> {
@@ -57,6 +75,37 @@ export function strictExitCode(result: ScanResult, strict: boolean | undefined):
   if (hasCritical) return 3;
   const hasBlocking = result.findings.some((finding) => finding.severity === "high" || finding.severity === "medium");
   return hasBlocking ? 2 : 0;
+}
+
+export function exitCodeForFindings(result: ScanResult, flags: CommonFlags): number {
+  const failOnSeverity = parseSeverityOrThrow(flags.failOn, "--fail-on");
+  if (failOnSeverity) {
+    const hasThresholdFinding = result.findings.some(
+      (finding) => severityRank(finding.severity) >= severityRank(failOnSeverity)
+    );
+    if (!hasThresholdFinding) return 0;
+    return failOnSeverity === "critical" ? 3 : 2;
+  }
+  return strictExitCode(result, flags.strict);
+}
+
+export function applyResultFilters(result: ScanResult, flags: CommonFlags): ScanResult {
+  const minSeverity = parseSeverityOrThrow(flags.minSeverity, "--min-severity");
+  if (!minSeverity) return result;
+
+  const filteredFindings = result.findings.filter(
+    (finding) => severityRank(finding.severity) >= severityRank(minSeverity)
+  );
+  const findingIds = new Set(filteredFindings.map((finding) => finding.id));
+  const filteredSuggestions = result.suggestions.filter((suggestion) =>
+    suggestion.findingIds.some((findingId) => findingIds.has(findingId))
+  );
+  return {
+    ...result,
+    findings: filteredFindings,
+    suggestions: filteredSuggestions,
+    risk: scoreFindings(filteredFindings)
+  };
 }
 
 export async function emitReport(

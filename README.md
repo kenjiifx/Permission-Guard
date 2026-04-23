@@ -20,6 +20,7 @@ It is designed for:
 - Compute deterministic `0-100` risk scores
 - Generate structured remediation suggestions with confidence levels
 - Emit terminal, JSON, and Markdown reports
+- Emit SARIF for code scanning integrations
 - Support strict CI exits based on finding severity
 
 ## Installation
@@ -63,6 +64,8 @@ Scans a local IAM policy file (or stdin) and prints findings.
 Common options:
 - `--role <roleName>` scan policies attached to an IAM role
 - `--strict` exit non-zero for medium/high/critical findings
+- `--fail-on <severity>` custom CI threshold (`low|medium|high|critical`)
+- `--min-severity <severity>` suppress lower-severity findings in output
 - `--json` emit machine-readable output
 - `--output <path>` write report output to file
 - `--quiet` suppress terminal output
@@ -75,11 +78,12 @@ Runs scan + risk scoring + suggestion generation.
 Options:
 - `--candidate-output <path>` write generated candidate policy JSON
 - `--output <path>` write report output
+- `--min-severity <severity>` filter findings and suggestions by severity
 - supports common options (`--role`, `--json`, `--quiet`, `--no-color`)
 
-### `permissionguard report <input> --format terminal|json|markdown`
+### `permissionguard report <input> --format terminal|json|markdown|sarif`
 
-Generates findings in terminal, JSON, or Markdown output format.
+Generates findings in terminal, JSON, Markdown, or SARIF output format.
 
 ### `permissionguard fetch --role <roleName>`
 
@@ -99,6 +103,8 @@ Built-in Commander metadata/help commands.
 - Excessive broad mutating/write permissions
 - Missing resource scoping opportunities
 - Missing conditions on risky broad patterns
+- Risky `Allow + NotAction` patterns
+- Risky `Allow + NotResource` patterns
 
 ## Risk Scoring and Suggestions
 

@@ -89,3 +89,67 @@ export function toMarkdown(payload: ReportPayload): string {
 
   return lines.join("\n");
 }
+
+const sarifLevelBySeverity: Record<Severity, "note" | "warning" | "error"> = {
+  low: "note",
+  medium: "warning",
+  high: "error",
+  critical: "error"
+};
+
+export function toSarif(payload: ReportPayload): string {
+  const rules = Array.from(
+    new Map(
+      payload.result.findings.map((finding) => [
+        finding.ruleId,
+        {
+          id: finding.ruleId,
+          name: finding.title,
+          shortDescription: { text: finding.description }
+        }
+      ])
+    ).values()
+  );
+
+  const results = payload.result.findings.map((finding) => ({
+    ruleId: finding.ruleId,
+    level: sarifLevelBySeverity[finding.severity],
+    message: {
+      text: `${finding.title}: ${finding.recommendation}`
+    },
+    locations: [
+      {
+        physicalLocation: {
+          artifactLocation: {
+            uri: payload.result.source
+          },
+          region: {
+            startLine: finding.statementIndex + 1
+          }
+        }
+      }
+    ],
+    properties: {
+      severity: finding.severity,
+      evidence: finding.evidence
+    }
+  }));
+
+  const sarif = {
+    $schema: "https://json.schemastore.org/sarif-2.1.0.json",
+    version: "2.1.0",
+    runs: [
+      {
+        tool: {
+          driver: {
+            name: "PermissionGuard",
+            version: payload.toolVersion,
+            rules
+          }
+        },
+        results
+      }
+    ]
+  };
+  return JSON.stringify(sarif, null, 2);
+}

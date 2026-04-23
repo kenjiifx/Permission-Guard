@@ -33,6 +33,10 @@ function recommendationForFinding(finding: Finding): string {
       return "Use concrete service resource ARNs to reduce access blast radius.";
     case "missing-conditions-risky-pattern":
       return "Add context-aware conditions such as principal, source account, region, or tagging constraints.";
+    case "allow-with-notaction":
+      return "Refactor NotAction-based Allow statement into explicit Action allowlists with scoped resources.";
+    case "allow-with-notresource":
+      return "Replace NotResource in Allow statements with explicit resource ARN allowlists.";
     default:
       return finding.recommendation;
   }

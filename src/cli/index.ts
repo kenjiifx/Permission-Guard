@@ -7,7 +7,7 @@ import { runFetchCommand } from "./commands/fetch.js";
 import type { ReportFormat } from "../report/index.js";
 
 const program = new Command();
-const ALLOWED_REPORT_FORMATS: ReportFormat[] = ["terminal", "json", "markdown"];
+const ALLOWED_REPORT_FORMATS: ReportFormat[] = ["terminal", "json", "markdown", "sarif"];
 
 program
   .name("permissionguard")
@@ -18,6 +18,8 @@ function withCommonFlags(command: Command): Command {
   return command
     .option("--role <roleName>", "Fetch and analyze policies attached to an IAM role")
     .option("--strict", "Exit non-zero when medium/high/critical findings are detected")
+    .option("--fail-on <severity>", "Exit non-zero when finding severity meets threshold")
+    .option("--min-severity <severity>", "Only include findings at or above severity threshold")
     .option("--quiet", "Suppress terminal output")
     .option("--json", "Emit JSON output")
     .option("--output <path>", "Write output to file")
@@ -49,13 +51,13 @@ withCommonFlags(
 withCommonFlags(
   program
     .command("report [input]")
-    .description("Generate findings report in terminal, JSON, or Markdown")
+    .description("Generate findings report in terminal, JSON, Markdown, or SARIF")
     .option(
       "--format <format>",
-      "terminal|json|markdown",
+      "terminal|json|markdown|sarif",
       (value: string): ReportFormat => {
         if (!ALLOWED_REPORT_FORMATS.includes(value as ReportFormat)) {
-          throw new Error(`Invalid --format '${value}'. Use terminal, json, or markdown.`);
+          throw new Error(`Invalid --format '${value}'. Use terminal, json, markdown, or sarif.`);
         }
         return value as ReportFormat;
       },

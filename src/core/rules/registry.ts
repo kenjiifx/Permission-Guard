@@ -48,6 +48,53 @@ function hasConditions(ruleCondition: Record<string, unknown>): boolean {
 
 export const v1Rules: Rule[] = [
   {
+    id: "allow-with-notaction",
+    title: "Allow with NotAction may grant unexpectedly broad access",
+    description: "NotAction in Allow statements can expand privileges beyond intended scope.",
+    evaluate: ({ statement }) => {
+      if (statement.effect !== "Allow" || statement.notActions.length === 0) return [];
+      const severity = statement.resources.includes("*") ? "critical" : "high";
+      return [
+        {
+          id: `${statement.index}-allow-notaction`,
+          ruleId: "allow-with-notaction",
+          title: "Allow statement uses NotAction",
+          severity,
+          statementIndex: statement.index,
+          statementSid: statement.sid,
+          description:
+            "Allow + NotAction creates an exception list model that is error-prone and often broader than intended.",
+          evidence: [`NotAction includes: ${statement.notActions.join(", ") || "(empty)"}`],
+          recommendation:
+            "Prefer explicit Action allowlists. If NotAction is required, scope resources tightly and add conditions."
+        }
+      ];
+    }
+  },
+  {
+    id: "allow-with-notresource",
+    title: "Allow with NotResource can bypass intended scoping",
+    description: "NotResource in Allow statements may unintentionally include sensitive resources.",
+    evaluate: ({ statement }) => {
+      if (statement.effect !== "Allow" || statement.notResources.length === 0) return [];
+      return [
+        {
+          id: `${statement.index}-allow-notresource`,
+          ruleId: "allow-with-notresource",
+          title: "Allow statement uses NotResource",
+          severity: "high",
+          statementIndex: statement.index,
+          statementSid: statement.sid,
+          description:
+            "Allow + NotResource grants access to all resources except exclusions, which is hard to reason about safely.",
+          evidence: [`NotResource includes: ${statement.notResources.join(", ") || "(empty)"}`],
+          recommendation:
+            "Prefer explicit Resource allowlists with concrete ARNs and avoid exclusion-based resource logic."
+        }
+      ];
+    }
+  },
+  {
     id: "wildcard-action",
     title: "Wildcard action allows every API operation",
     description: "Using Action '*' allows all actions and is usually an admin-level risk.",

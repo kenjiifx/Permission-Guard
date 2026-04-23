@@ -40,4 +40,20 @@ describe("rule engine", () => {
     const findings = analyzePolicy(policy);
     expect(findings.some((f) => f.ruleId === "sensitive-actions")).toBe(true);
   });
+
+  it("detects risky Allow + NotAction and Allow + NotResource patterns", () => {
+    const policy = parsePolicyFromUnknown(
+      {
+        Version: "2012-10-17",
+        Statement: [
+          { Effect: "Allow", NotAction: ["iam:*"], Resource: "*" },
+          { Effect: "Allow", Action: ["s3:GetObject"], NotResource: ["arn:aws:s3:::prod/*"] }
+        ]
+      },
+      "not-patterns"
+    );
+    const findings = analyzePolicy(policy);
+    expect(findings.some((f) => f.ruleId === "allow-with-notaction")).toBe(true);
+    expect(findings.some((f) => f.ruleId === "allow-with-notresource")).toBe(true);
+  });
 });

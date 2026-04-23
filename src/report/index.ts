@@ -1,7 +1,7 @@
 import type { ReportPayload } from "../types/index.js";
-import { toJson, toMarkdown, toTerminal } from "./formatters.js";
+import { toJson, toMarkdown, toSarif, toTerminal } from "./formatters.js";
 
-export type ReportFormat = "terminal" | "json" | "markdown";
+export type ReportFormat = "terminal" | "json" | "markdown" | "sarif";
 
 export function formatReport(
   payload: ReportPayload,
@@ -10,5 +10,6 @@ export function formatReport(
 ): string {
   if (format === "json") return toJson(payload);
   if (format === "markdown") return toMarkdown(payload);
+  if (format === "sarif") return toSarif(payload);
   return toTerminal(payload.result, opts);
 }

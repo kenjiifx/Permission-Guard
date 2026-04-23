@@ -40,11 +40,14 @@ const payload: ReportPayload = {
 };
 
 describe("report formatting", () => {
-  it("renders json and markdown", () => {
+  it("renders json markdown and sarif", () => {
     const asJson = formatReport(payload, "json");
     const asMd = formatReport(payload, "markdown");
+    const asSarif = formatReport(payload, "sarif");
     expect(asJson).toContain("\"toolVersion\": \"0.1.0\"");
     expect(asMd).toContain("# PermissionGuard Report");
     expect(asMd).toContain("Action wildcard");
+    expect(asSarif).toContain("\"version\": \"2.1.0\"");
+    expect(asSarif).toContain("\"ruleId\": \"wildcard-action\"");
   });
 });

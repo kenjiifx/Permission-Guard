@@ -26,6 +26,24 @@ describe("cli command flows", () => {
     expect(code).toBe(0);
   });
 
+  it("supports fail-on severity thresholds", async () => {
+    const highThreshold = await runScanCommand("examples/broad-s3-policy.json", {
+      failOn: "high",
+      quiet: true,
+      json: false,
+      color: false
+    });
+    expect(highThreshold).toBe(2);
+
+    const criticalThreshold = await runScanCommand("examples/broad-s3-policy.json", {
+      failOn: "critical",
+      quiet: true,
+      json: false,
+      color: false
+    });
+    expect(criticalThreshold).toBe(0);
+  });
+
   it("keeps suggest candidate output as valid policy json", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "pg-suggest-"));
     const candidateOutputPath = join(tempDir, "candidate.json");
