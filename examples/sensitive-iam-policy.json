@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SensitiveOps",
+      "Effect": "Allow",
+      "Action": ["iam:PassRole", "iam:AttachRolePolicy", "sts:AssumeRole"],
+      "Resource": "*"
+    }
+  ]
+}
