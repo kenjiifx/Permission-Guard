@@ -48,6 +48,7 @@ Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to maintainers by opening a community moderation issue:
 
 - <https://github.com/kenjiifx/Permission-Guard/issues/new/choose>
+- Email: alammoosa07@gmail.com
 
 For security-sensitive reports, follow the private process in `SECURITY.md`.
 

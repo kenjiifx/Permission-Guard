@@ -16,7 +16,7 @@
     "url": "https://github.com/kenjiifx/Permission-Guard.git"
   },
   "license": "MIT",
-  "author": "Permission Guard Contributors",
+  "author": "Moosa Alam",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

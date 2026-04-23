@@ -14,6 +14,7 @@ If you discover a potential vulnerability, report it privately through GitHub Se
 If you cannot use advisories, open a maintainer contact request:
 
 - <https://github.com/kenjiifx/Permission-Guard/issues/new/choose>
+- Email: alammoosa07@gmail.com
 
 Please include, where possible:
 
