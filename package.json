@@ -1,19 +1,29 @@
 {
   "name": "permissionguard",
   "version": "0.1.0",
-  "description": "Local-first CLI to detect overly broad AWS IAM permissions and generate safer remediation suggestions.",
+  "description": "AWS IAM security scanner CLI that detects overly broad permissions, scores risk, and suggests safer policy changes.",
   "keywords": [
     "aws",
     "iam",
+    "iam-policy",
+    "aws-security",
+    "cloud-security",
+    "devsecops",
     "security",
-    "cli",
+    "security-scanner",
     "least-privilege",
+    "policy-as-code",
+    "sarif",
+    "cli",
     "typescript"
   ],
   "homepage": "https://github.com/kenjiifx/Permission-Guard",
   "repository": {
     "type": "git",
     "url": "https://github.com/kenjiifx/Permission-Guard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kenjiifx/Permission-Guard/issues"
   },
   "license": "MIT",
   "author": "Moosa Alam",

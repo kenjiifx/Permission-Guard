@@ -1,5 +1,9 @@
 # Permission Guard
 
+![CI](https://github.com/kenjiifx/Permission-Guard/actions/workflows/ci.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/permissionguard.svg)](https://www.npmjs.com/package/permissionguard)
+
 Permission Guard is a local-first CLI for identifying overly broad AWS IAM permissions, explaining their risk, and generating safer, reviewable remediation candidates.
 
 The project is deterministic and rules-based. It does **not** use LLM APIs, and it does **not** claim to produce perfect least-privilege policies automatically.
@@ -12,6 +16,15 @@ It is designed for:
 - security-minded developers
 - platform and cloud engineering teams
 - CI pipelines that need deterministic behavior
+
+## Discoverability Keywords
+
+Permission Guard is built for use cases commonly searched by developers and cloud teams:
+- AWS IAM policy scanner
+- IAM least-privilege audit tool
+- DevSecOps CLI for permission reviews
+- Security linting for IAM JSON policies
+- SARIF IAM findings for CI/code scanning
 
 ## Core Capabilities
 
@@ -89,6 +102,17 @@ Generates findings in terminal, JSON, Markdown, or SARIF output format.
 
 Fetches inline and attached managed policies for an IAM role (AWS SDK v3).
 
+### `permissionguard explain [ruleId]`
+
+Lists all detection rule IDs, or explains a single rule in detail.
+
+## Real-World Use Cases
+
+- **Pre-merge IAM checks:** run `scan` or `report --format sarif` in CI and fail on risk thresholds.
+- **Incident hardening:** quickly identify broad wildcard access in legacy policies.
+- **Migration reviews:** compare old policy docs and candidate safer output during cloud refactors.
+- **Platform guardrails:** provide teams deterministic feedback before policy changes are deployed.
+
 ### `permissionguard version` / `permissionguard help`
 
 Built-in Commander metadata/help commands.
@@ -105,6 +129,7 @@ Built-in Commander metadata/help commands.
 - Missing conditions on risky broad patterns
 - Risky `Allow + NotAction` patterns
 - Risky `Allow + NotResource` patterns
+- Wildcard principal (`Principal: "*"`) exposure
 
 ## Risk Scoring and Suggestions
 

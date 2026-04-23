@@ -56,4 +56,23 @@ describe("rule engine", () => {
     expect(findings.some((f) => f.ruleId === "allow-with-notaction")).toBe(true);
     expect(findings.some((f) => f.ruleId === "allow-with-notresource")).toBe(true);
   });
+
+  it("detects wildcard principal exposure", () => {
+    const policy = parsePolicyFromUnknown(
+      {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: "s3:GetObject",
+            Resource: "arn:aws:s3:::public-bucket/*"
+          }
+        ]
+      },
+      "principal"
+    );
+    const findings = analyzePolicy(policy);
+    expect(findings.some((f) => f.ruleId === "wildcard-principal")).toBe(true);
+  });
 });

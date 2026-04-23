@@ -37,6 +37,8 @@ function recommendationForFinding(finding: Finding): string {
       return "Refactor NotAction-based Allow statement into explicit Action allowlists with scoped resources.";
     case "allow-with-notresource":
       return "Replace NotResource in Allow statements with explicit resource ARN allowlists.";
+    case "wildcard-principal":
+      return "Replace wildcard principals with specific AWS account, role, or service principals.";
     default:
       return finding.recommendation;
   }

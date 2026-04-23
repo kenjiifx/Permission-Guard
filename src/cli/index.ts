@@ -4,6 +4,7 @@ import { runScanCommand } from "./commands/scan.js";
 import { runSuggestCommand } from "./commands/suggest.js";
 import { runReportCommand } from "./commands/report.js";
 import { runFetchCommand } from "./commands/fetch.js";
+import { runExplainCommand } from "./commands/explain.js";
 import type { ReportFormat } from "../report/index.js";
 
 const program = new Command();
@@ -80,6 +81,18 @@ program
   .action(async (options: { role: string; output?: string }) => {
     try {
       process.exitCode = await runFetchCommand(options.role, options.output);
+    } catch (error) {
+      process.stderr.write(`Error: ${(error as Error).message}\n`);
+      process.exitCode = 1;
+    }
+  });
+
+program
+  .command("explain [ruleId]")
+  .description("List available detection rules or explain a specific rule")
+  .action(async (ruleId?: string) => {
+    try {
+      process.exitCode = await runExplainCommand(ruleId);
     } catch (error) {
       process.stderr.write(`Error: ${(error as Error).message}\n`);
       process.exitCode = 1;

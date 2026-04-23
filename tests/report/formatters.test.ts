@@ -47,6 +47,7 @@ describe("report formatting", () => {
     expect(asJson).toContain("\"toolVersion\": \"0.1.0\"");
     expect(asMd).toContain("# PermissionGuard Report");
     expect(asMd).toContain("Action wildcard");
+    expect(asMd).toContain("Severity summary");
     expect(asSarif).toContain("\"version\": \"2.1.0\"");
     expect(asSarif).toContain("\"ruleId\": \"wildcard-action\"");
   });

@@ -95,6 +95,30 @@ export const v1Rules: Rule[] = [
     }
   },
   {
+    id: "wildcard-principal",
+    title: "Wildcard principal grants access to any principal",
+    description: "Principal '*' can expose resources broadly, especially with broad actions/resources.",
+    evaluate: ({ statement }) => {
+      if (statement.effect !== "Allow") return [];
+      if (!statement.principals.includes("*")) return [];
+      const severe = statement.actions.includes("*") || statement.resources.includes("*");
+      return [
+        {
+          id: `${statement.index}-wildcard-principal`,
+          ruleId: "wildcard-principal",
+          title: "Wildcard principal",
+          severity: severe ? "critical" : "high",
+          statementIndex: statement.index,
+          statementSid: statement.sid,
+          description: "Principal '*' allows any principal to match this statement.",
+          evidence: [`Principal includes '*'`, `Actions: ${statement.actions.join(", ") || "(none)"}`],
+          recommendation:
+            "Restrict Principal to known AWS account, role, or service principals and add context conditions."
+        }
+      ];
+    }
+  },
+  {
     id: "wildcard-action",
     title: "Wildcard action allows every API operation",
     description: "Using Action '*' allows all actions and is usually an admin-level risk.",

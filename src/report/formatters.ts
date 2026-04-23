@@ -1,6 +1,16 @@
 import chalk from "chalk";
 import type { ReportPayload, ScanResult, Severity } from "../types/index.js";
 
+function severitySummary(findings: ScanResult["findings"]): Record<Severity, number> {
+  return findings.reduce<Record<Severity, number>>(
+    (acc, finding) => {
+      acc[finding.severity] += 1;
+      return acc;
+    },
+    { low: 0, medium: 0, high: 0, critical: 0 }
+  );
+}
+
 function badge(severity: Severity, colorize: boolean): string {
   const value = severity.toUpperCase();
   if (!colorize) return `[${value}]`;
@@ -23,6 +33,10 @@ export function toTerminal(result: ScanResult, opts?: { color?: boolean }): stri
   lines.push(`Source: ${result.source}`);
   lines.push(`Risk Score: ${result.risk.score}/100 (${result.risk.level})`);
   lines.push(`Findings: ${result.findings.length}`);
+  const summary = severitySummary(result.findings);
+  lines.push(
+    `Severity Summary: critical=${summary.critical}, high=${summary.high}, medium=${summary.medium}, low=${summary.low}`
+  );
   lines.push("");
 
   if (result.findings.length === 0) {
@@ -57,6 +71,10 @@ export function toMarkdown(payload: ReportPayload): string {
   lines.push(`- **Source:** ${result.source}`);
   lines.push(`- **Risk score:** ${result.risk.score}/100 (${result.risk.level})`);
   lines.push(`- **Findings:** ${result.findings.length}`);
+  const summary = severitySummary(result.findings);
+  lines.push(
+    `- **Severity summary:** critical=${summary.critical}, high=${summary.high}, medium=${summary.medium}, low=${summary.low}`
+  );
   lines.push("");
   lines.push("## Findings");
   lines.push("");
