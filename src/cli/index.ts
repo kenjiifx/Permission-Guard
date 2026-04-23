@@ -7,6 +7,7 @@ import { runFetchCommand } from "./commands/fetch.js";
 import type { ReportFormat } from "../report/index.js";
 
 const program = new Command();
+const ALLOWED_REPORT_FORMATS: ReportFormat[] = ["terminal", "json", "markdown"];
 
 program
   .name("permissionguard")
@@ -48,7 +49,17 @@ withCommonFlags(
   program
     .command("report [input]")
     .description("Generate findings report in terminal, JSON, or Markdown")
-    .option("--format <format>", "terminal|json|markdown", "terminal")
+    .option(
+      "--format <format>",
+      "terminal|json|markdown",
+      (value: string): ReportFormat => {
+        if (!ALLOWED_REPORT_FORMATS.includes(value as ReportFormat)) {
+          throw new Error(`Invalid --format '${value}'. Use terminal, json, or markdown.`);
+        }
+        return value as ReportFormat;
+      },
+      "terminal"
+    )
 ).action(async (input, options: { format: ReportFormat }) => {
   try {
     process.exitCode = await runReportCommand(input, options as { format: ReportFormat });

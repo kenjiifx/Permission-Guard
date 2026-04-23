@@ -11,7 +11,9 @@ export async function runSuggestCommand(input: string | undefined, flags: Common
   const policy = await loadPolicyInput(input, flags.role);
   const result = runScan(policy);
   const outputPath = await writeCandidatePolicy(flags.output, result.candidatePolicy);
-  await emitReport(buildPayload(result), flags.json ? "json" : "terminal", flags);
+  // In suggest mode, --output is reserved for candidate policy file output.
+  // Do not reuse the same path for report rendering to avoid overwriting JSON candidate output.
+  await emitReport(buildPayload(result), flags.json ? "json" : "terminal", { ...flags, output: undefined });
   if (!flags.quiet && outputPath) {
     process.stdout.write(`Candidate policy written to: ${outputPath}\n`);
   }

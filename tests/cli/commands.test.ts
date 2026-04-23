@@ -1,5 +1,9 @@
+import { mkdtemp, readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { describe, expect, it } from "vitest";
 import { runScanCommand } from "../../src/cli/commands/scan.js";
+import { runSuggestCommand } from "../../src/cli/commands/suggest.js";
 
 describe("cli command flows", () => {
   it("returns strict nonzero for critical findings", async () => {
@@ -20,5 +24,21 @@ describe("cli command flows", () => {
       color: false
     });
     expect(code).toBe(0);
+  });
+
+  it("keeps suggest candidate output as valid policy json", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "pg-suggest-"));
+    const outputPath = join(tempDir, "candidate.json");
+
+    await runSuggestCommand("examples/broad-s3-policy.json", {
+      output: outputPath,
+      quiet: true,
+      json: false,
+      color: false
+    });
+
+    const candidateRaw = await readFile(outputPath, "utf8");
+    const parsed = JSON.parse(candidateRaw) as { Statement?: unknown[] };
+    expect(Array.isArray(parsed.Statement)).toBe(true);
   });
 });
