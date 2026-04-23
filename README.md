@@ -13,6 +13,7 @@ The project is deterministic and rules-based. It does **not** use LLM APIs, and 
 IAM policies often drift into risky patterns over time (`Action: "*"`, `Resource: "*"`, broad service wildcards). Permission Guard helps teams detect this drift quickly and gives concrete, reviewable next steps.
 
 It is designed for:
+
 - security-minded developers
 - platform and cloud engineering teams
 - CI pipelines that need deterministic behavior
@@ -20,6 +21,7 @@ It is designed for:
 ## Discoverability Keywords
 
 Permission Guard is built for use cases commonly searched by developers and cloud teams:
+
 - AWS IAM policy scanner
 - IAM least-privilege audit tool
 - DevSecOps CLI for permission reviews
@@ -78,6 +80,7 @@ permissionguard batch ./policies --format markdown --output batch-report.md
 Scans a local IAM policy file (or stdin) and prints findings.
 
 Common options:
+
 - `--role <roleName>` scan policies attached to an IAM role
 - `--strict` exit non-zero for medium/high/critical findings
 - `--fail-on <severity>` custom CI threshold (`low|medium|high|critical`)
@@ -92,6 +95,7 @@ Common options:
 Runs scan + risk scoring + suggestion generation.
 
 Options:
+
 - `--candidate-output <path>` write generated candidate policy JSON
 - `--output <path>` write report output
 - `--min-severity <severity>` filter findings and suggestions by severity
@@ -114,6 +118,7 @@ Lists all detection rule IDs, or explains a single rule in detail.
 Scans all `.json` files in a directory (recursive) or a single file and emits an aggregated report.
 
 Options:
+
 - `--format <terminal|json|markdown>` output format for batch report
 - supports common options (`--min-severity`, `--fail-on`, `--output`, `--quiet`)
 
@@ -176,6 +181,7 @@ Permission Guard is intentionally conservative:
 ## Development
 
 Scripts:
+
 - `npm run build`
 - `npm run lint`
 - `npm run typecheck`
