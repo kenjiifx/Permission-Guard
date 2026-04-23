@@ -6,9 +6,13 @@ Permission Guard is currently in early V1 development. Security fixes are applie
 
 ## Reporting a Vulnerability
 
-If you discover a security issue, please report it privately:
+If you discover a security issue, please report it privately through GitHub Security Advisories:
 
-- Email: security@permissionguard.dev
+- <https://github.com/kenjiifx/Permission-Guard/security/advisories/new>
+
+If you cannot use GitHub advisories, open a private maintainer contact request in issues:
+
+- <https://github.com/kenjiifx/Permission-Guard/issues/new/choose>
 
 Please include:
 
