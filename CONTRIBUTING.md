@@ -1,41 +1,48 @@
 # Contributing to Permission Guard
 
-Thanks for your interest in contributing.
+Thanks for helping improve Permission Guard.
 
-## Ground Rules
+## Project Principles
 
-- Keep behavior deterministic and local-first.
-- Do not add paid API dependencies or LLM-based scanning.
-- Prefer explicit typing and modular code over clever shortcuts.
-- Keep PRs small and reviewable.
+Contributions should preserve these constraints:
 
-## Development Setup
+- deterministic, local-first behavior
+- no paid API dependencies
+- no LLM-based analysis pipeline
+- typed, testable, maintainable code
+- practical security guidance over hype
+
+## Local Setup
 
 ```bash
 npm install
-npm run build
-npm run lint
-npm run typecheck
-npm run test
+npm run ci
 ```
 
-## Pull Request Guidelines
+## Branch and PR Expectations
 
-- Add or update tests for parser, rules, scorer, suggestions, and reporting when behavior changes.
-- Include documentation updates when commands, flags, or output shapes change.
-- Use conventional commit messages when possible (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
-- Keep breaking changes out of V1 unless discussed in an issue first.
+- Keep pull requests focused and reviewable
+- Add/update tests whenever behavior changes
+- Update docs when flags, outputs, or workflows change
+- Prefer conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`)
 
-## Adding or Modifying Rules
+## Rule Engine Changes
 
-When updating detection logic:
+If your PR adds or updates detection rules:
 
-1. Add/update rule logic in `src/core/rules/registry.ts`.
-2. Add corresponding tests in `tests/core/rules.test.ts`.
-3. Confirm scoring impact in `tests/core/scorer.test.ts` when relevant.
-4. Validate formatter output stability for JSON/Markdown reports.
+1. Update logic in `src/core/rules/registry.ts`
+2. Add or update tests in `tests/core/rules.test.ts`
+3. Validate risk score behavior in `tests/core/scorer.test.ts` if impacted
+4. Ensure JSON and Markdown report output remains stable
 
-## Security Bug Reports
+## Suggested PR Checklist
 
-Please do not open public issues for sensitive vulnerabilities.
-Use the private process documented in `SECURITY.md`.
+- [ ] `npm run ci` passes locally
+- [ ] tests added or updated for behavior changes
+- [ ] docs updated where needed
+- [ ] no dead code or placeholder logic
+
+## Security Reporting
+
+Please do not open public issues for exploitable vulnerabilities.
+Use the private reporting process in `SECURITY.md`.

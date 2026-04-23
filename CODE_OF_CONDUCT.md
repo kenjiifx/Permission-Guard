@@ -45,13 +45,13 @@ an individual is officially representing the project in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the maintainers by opening a community moderation issue:
+reported to maintainers by opening a community moderation issue:
 
 - <https://github.com/kenjiifx/Permission-Guard/issues/new/choose>
 
-For security-sensitive reports, use the private process in `SECURITY.md`.
+For security-sensitive reports, follow the private process in `SECURITY.md`.
 
-All complaints will be reviewed and investigated promptly and fairly.
+All reports are reviewed and handled as promptly and fairly as possible.
 
 ## Attribution
 
