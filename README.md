@@ -23,8 +23,6 @@ Expected result:
 
 ![Permission Guard CLI demo](assets/demo-scan.gif)
 
-> Maintainers: place the recorded terminal GIF at `assets/demo-scan.gif`. The repo includes `examples/bad-policy.json` specifically for this demo path.
-
 ## Why This Project Exists
 
 IAM policies often drift into risky patterns over time (`Action: "*"`, `Resource: "*"`, broad service wildcards). Permission Guard helps teams detect this drift quickly and gives concrete, reviewable next steps.
