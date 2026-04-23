@@ -5,10 +5,13 @@ import { runSuggestCommand } from "./commands/suggest.js";
 import { runReportCommand } from "./commands/report.js";
 import { runFetchCommand } from "./commands/fetch.js";
 import { runExplainCommand } from "./commands/explain.js";
+import { runBatchCommand } from "./commands/batch.js";
 import type { ReportFormat } from "../report/index.js";
+import { loadPermissionGuardConfig, mergeFlagsWithConfig } from "./config.js";
 
 const program = new Command();
 const ALLOWED_REPORT_FORMATS: ReportFormat[] = ["terminal", "json", "markdown", "sarif"];
+const ALLOWED_BATCH_FORMATS = ["terminal", "json", "markdown"] as const;
 
 program
   .name("permissionguard")
@@ -30,7 +33,8 @@ function withCommonFlags(command: Command): Command {
 withCommonFlags(program.command("scan [input]").description("Scan a local IAM policy file or IAM role"))
   .action(async (input, options) => {
     try {
-      process.exitCode = await runScanCommand(input, options);
+      const merged = mergeFlagsWithConfig(options, await loadPermissionGuardConfig());
+      process.exitCode = await runScanCommand(input, merged);
     } catch (error) {
       process.stderr.write(`Error: ${(error as Error).message}\n`);
       process.exitCode = 1;
@@ -42,7 +46,8 @@ withCommonFlags(
     .option("--candidate-output <path>", "Write generated candidate policy JSON to file")
 ).action(async (input, options) => {
   try {
-    process.exitCode = await runSuggestCommand(input, options);
+    const merged = mergeFlagsWithConfig(options, await loadPermissionGuardConfig());
+    process.exitCode = await runSuggestCommand(input, merged);
   } catch (error) {
     process.stderr.write(`Error: ${(error as Error).message}\n`);
     process.exitCode = 1;
@@ -66,7 +71,10 @@ withCommonFlags(
     )
 ).action(async (input, options: { format: ReportFormat }) => {
   try {
-    process.exitCode = await runReportCommand(input, options as { format: ReportFormat });
+    const config = await loadPermissionGuardConfig();
+    const merged = mergeFlagsWithConfig(options as { format: ReportFormat }, config);
+    merged.format = options.format ?? config.reportFormat ?? "terminal";
+    process.exitCode = await runReportCommand(input, merged as { format: ReportFormat });
   } catch (error) {
     process.stderr.write(`Error: ${(error as Error).message}\n`);
     process.exitCode = 1;
@@ -86,6 +94,33 @@ program
       process.exitCode = 1;
     }
   });
+
+withCommonFlags(
+  program
+    .command("batch <target>")
+    .description("Scan all JSON policy files under a directory or single file")
+    .option(
+      "--format <format>",
+      "terminal|json|markdown",
+      (value: string): "terminal" | "json" | "markdown" => {
+        if (!ALLOWED_BATCH_FORMATS.includes(value as (typeof ALLOWED_BATCH_FORMATS)[number])) {
+          throw new Error(`Invalid --format '${value}'. Use terminal, json, or markdown.`);
+        }
+        return value as "terminal" | "json" | "markdown";
+      },
+      "terminal"
+    )
+).action(async (target, options: { format: "terminal" | "json" | "markdown" }) => {
+  try {
+    const config = await loadPermissionGuardConfig();
+    const merged = mergeFlagsWithConfig(options, config);
+    merged.format = options.format ?? config.batchFormat ?? "terminal";
+    process.exitCode = await runBatchCommand(target, merged as { format: "terminal" | "json" | "markdown" });
+  } catch (error) {
+    process.stderr.write(`Error: ${(error as Error).message}\n`);
+    process.exitCode = 1;
+  }
+});
 
 program
   .command("explain [ruleId]")

@@ -85,6 +85,16 @@ export interface ScanResult {
   candidatePolicy?: NormalizedPolicyDocument;
 }
 
+export interface BatchScanResult {
+  target: string;
+  scannedFiles: number;
+  successfulScans: number;
+  failedScans: Array<{ source: string; error: string }>;
+  results: ScanResult[];
+  aggregatedRisk: RiskScore;
+  findings: Finding[];
+}
+
 export interface ReportPayload {
   generatedAt: string;
   toolVersion: string;

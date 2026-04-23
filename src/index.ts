@@ -4,5 +4,6 @@ export * from "./core/analyzer.js";
 export * from "./core/scorer.js";
 export * from "./core/suggester.js";
 export * from "./core/engine.js";
+export * from "./core/batch.js";
 export * from "./report/index.js";
 export * from "./aws/iam.js";

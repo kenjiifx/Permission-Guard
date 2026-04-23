@@ -66,6 +66,9 @@ permissionguard fetch --role MyAppRole
 
 # Scan role policies and fail CI for medium/high/critical findings
 permissionguard scan --role MyAppRole --strict
+
+# Scan an entire directory of JSON policies
+permissionguard batch ./policies --format markdown --output batch-report.md
 ```
 
 ## Commands
@@ -105,6 +108,14 @@ Fetches inline and attached managed policies for an IAM role (AWS SDK v3).
 ### `permissionguard explain [ruleId]`
 
 Lists all detection rule IDs, or explains a single rule in detail.
+
+### `permissionguard batch <target>`
+
+Scans all `.json` files in a directory (recursive) or a single file and emits an aggregated report.
+
+Options:
+- `--format <terminal|json|markdown>` output format for batch report
+- supports common options (`--min-severity`, `--fail-on`, `--output`, `--quiet`)
 
 ## Real-World Use Cases
 
@@ -171,6 +182,22 @@ Scripts:
 - `npm run test`
 - `npm run ci`
 - `npm run format`
+
+## Project Configuration
+
+Permission Guard optionally reads `.permissionguard.json` from the current working directory to set defaults.
+
+Example:
+
+```json
+{
+  "strict": true,
+  "failOn": "high",
+  "minSeverity": "medium",
+  "reportFormat": "markdown",
+  "batchFormat": "json"
+}
+```
 
 ## Governance
 
