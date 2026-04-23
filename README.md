@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/kenjiifx/Permission-Guard/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![npm version](https://img.shields.io/npm/v/permissionguard.svg)](https://www.npmjs.com/package/permissionguard)
+[![npm version](https://img.shields.io/npm/v/@kenjiifx/permissionguard.svg)](https://www.npmjs.com/package/@kenjiifx/permissionguard)
 
 Permission Guard is a local-first CLI for identifying overly broad AWS IAM permissions, explaining their risk, and generating safer, reviewable remediation candidates.
 
@@ -39,7 +39,7 @@ Permission Guard is built for use cases commonly searched by developers and clou
 ## Installation
 
 ```bash
-npm install -g permissionguard
+npm install -g @kenjiifx/permissionguard
 ```
 
 For local development:

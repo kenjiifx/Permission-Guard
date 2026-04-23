@@ -1,5 +1,5 @@
 {
-  "name": "permissionguard",
+  "name": "@kenjiifx/permissionguard",
   "version": "0.1.0",
   "description": "AWS IAM security scanner CLI that detects overly broad permissions, scores risk, and suggests safer policy changes.",
   "keywords": [
@@ -24,6 +24,9 @@
   },
   "bugs": {
     "url": "https://github.com/kenjiifx/Permission-Guard/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT",
   "author": "Moosa Alam",
